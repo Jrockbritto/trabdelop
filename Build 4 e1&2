@@ -44,7 +44,6 @@ function player() {
     ciry= (canvas.y/2)+y
 ellipse(cirx,ciry, 50, 50); 
 }
-}
 
 //Inimigo
 
@@ -85,4 +84,6 @@ function draw() {
   background(220);
   enemy();
   player ();
+  line(0, canvas.y/2, canvas.x, canvas.y/2);
+  line(canvas.x/2, 0, canvas.x/2, canvas.y);
 }
