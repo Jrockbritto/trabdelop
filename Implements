@@ -1,0 +1,29 @@
+#//transforma v em vetor unitario
+if((player.movx-winMouseX)>0){
+      uni=Math.sqrt(((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
+    }
+      else{
+        uni=Math.sqrt((-(player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
+      }
+     
+      if (((player.movy-winMouseY))>0){
+      uni=Math.sqrt(-((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
+      }
+      else{
+        uni=Math.sqrt((-(player.movx-winMouseX)^2)-((player.movy-winMouseY)^2));
+      }
+      
+#//tiro 360
+   if((player.movx-winMouseX)>0)
+      dirx=player.movx+(t*-Math.abs(player.movx-winMouseX)/uni);
+      else
+        dirx=player.movx+(t*Math.abs(player.movx-winMouseX)/uni);
+     
+      if (((player.movy-winMouseY))>0){
+       diry=player.movy+(t*-(Math.abs(player.movy-winMouseY)/uni));
+     }
+      else {
+        diry=player.movy+(t*(Math.abs(player.movy-winMouseY)/uni));
+      }
+    ellipse(dirx,diry,20,20);
+  }
