@@ -27,3 +27,20 @@ if((player.movx-winMouseX)>0){
       }
     ellipse(dirx,diry,20,20);
   }
+
+//pega o ultimo x e y d o mouse e do player, assim como dondiciona cada tiro em sua reta especifica
+function reta() {
+  while (contc==0) {
+      a=mouseX;
+      b=mouseY;
+      c=player.movx
+      d=player.movy
+      contc+=1
+      }
+}
+dentro do tiro
+if (mouseIsPressed) {
+    if (mouseButton === LEFT) {
+        reta();
+  }
+        }
