@@ -13,26 +13,8 @@ function setup() {
   Player= new player()
   frameRate(60);
 }
-let x=0;
-let y=0;
-let i=0;
-let j=0;
-let movx=0;
-let movy=0;
-let t=0;
-let diry=0;
-var dirx=0;
-let mx=0;
-let my=0;
-let mirx=0;
-let miry=0;
-let r=90;
-let uni=1;
-let a=0;
-let b=0;
-let c=0;
-let d=0;
-let contc=0;
+let x=0,y=0,i=0,j=0,movx=0,movy=0,t=0,diry=0,dirx=0,mx=0,my=0,mirx=0,miry=0,r=90,uni=1,a=0,b=0,c=0,d=0,contc=0;
+
 function reta() {
   while (contc==0) {
       a=mouseX;
@@ -44,19 +26,19 @@ function reta() {
 }
 function movset(){
   if (keyIsDown(LEFT_ARROW)) {
-    x -= 5*speedx;
+    x -= 3*speedx;
   }
 
   if (keyIsDown(RIGHT_ARROW)) {
-    x += 5*speedx;
+    x += 3*speedx;
   }
 
   if (keyIsDown(UP_ARROW)) {
-    y -= 5*speedy;
+    y -= 3*speedy;
   }
 
   if (keyIsDown(DOWN_ARROW)) {
-    y += 5*speedy;
+    y += 3*speedy;
   }
   
   if (keyIsDown(82)){
@@ -64,6 +46,7 @@ function movset(){
     x = 0;
     t = 0;
    }
+  //velocidade do personagem compensada
   if(canvas.x==canvas.y){
   speedx=canvas.x/400;
   speedy=canvas.y/400;
@@ -72,10 +55,6 @@ function movset(){
   speedy=((((canvas.y/10)/9)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
   }
  //designa o acumilado de x e y
- if(canvas.x==canvas.y){
-  movx=+x;
-  movy=+y;
- }else
   movx=+x;
   movy=+y;
   //posiciona de acordo com a posição inicial+movimentação teclado
@@ -118,25 +97,28 @@ class player {
   //tiro
   tiro() {
     //mira
-   /* if((player.movx-winMouseX)>0){
-      uni=Math.sqrt(((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
-    }
-      else{
-        uni=Math.sqrt((-(player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
-      }
-     
-      if (((player.movy-winMouseY))>0){
-      uni=Math.sqrt(-((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
-      }
-      else{
-        uni=Math.sqrt((-(player.movx-winMouseX)^2)-((player.movy-winMouseY)^2));
-      }*/
-      ellipse(mirx,miry,30,30);
    ellipse(mouseX,mouseY,10,10);
+  //movi tiro
+    let vx= Math.abs(c-a);
+    let vy=Math.abs(d-b);
+    let mv= Math.sqrt((vx^2)+(vy^2));
+    
+    //para x
+     if((c-a)>0)
+      dirx=c+((t)*-vx);
+      else
+        dirx=c+(t*vx);
+     //para y
+      if (((d-b))>0){
+       diry=d+((t)*(-vy));
+     }
+      else {
+        diry=d+((t)*vy);  
+      }
       //gatilho
      if (mouseIsPressed) {
     if (mouseButton === LEFT) {
-      t+=0.05;
+      t+=0.01;
      }
      }
         if (mouseIsPressed) {
@@ -144,23 +126,8 @@ class player {
         reta();
   }
         }
-  //movi tiro
-    let vx= Math.abs(c-a);
-    let vy=Math.abs(d-b);
-    //
-     if((c-a)>0)
-      dirx=c+t*-vx;
-      else
-        dirx=c+t*vx;
-     
-      if (((d-b))>0){
-       diry=d+(t*(-vy));
-     }
-      else {
-        diry=d+(t*vy);
-      }
-    ellipse(dirx,diry,20,20);
-  }
+        ellipse(dirx,diry,20,20);
+}
 }
 //inimigo
 function enemy() {
@@ -204,7 +171,6 @@ function draw() {
   line(0, canvas.y/2, canvas.x, canvas.y/2);
   text(mouseX,90,60);
   text(mouseY,90,80);
-  text(dirx^2,90,100);
-  text(contc,90,120);
+  text(contc,90,100);
   line(canvas.x/2, 0, canvas.x/2, canvas.y);
 }
