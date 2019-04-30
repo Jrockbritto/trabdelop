@@ -118,7 +118,7 @@ class player {
   //tiro
   tiro() {
     //mira
-    if((player.movx-winMouseX)>0){
+   /* if((player.movx-winMouseX)>0){
       uni=Math.sqrt(((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
     }
       else{
@@ -130,7 +130,7 @@ class player {
       }
       else{
         uni=Math.sqrt((-(player.movx-winMouseX)^2)-((player.movy-winMouseY)^2));
-      }
+      }*/
       ellipse(mirx,miry,30,30);
    ellipse(mouseX,mouseY,10,10);
       //gatilho
