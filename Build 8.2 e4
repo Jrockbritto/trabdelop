@@ -1,0 +1,210 @@
+/* 
+    Equipe: 
+        João Rock Brito Santos - Subturma C (Líder) 
+        Felipe Sérgio Sousa da Silva - Subturma A 
+        Etapa 1 & 2
+*/
+//Setup
+
+function setup() {
+  canvas.x=1280;
+  canvas.y=720;
+  createCanvas(canvas.x,canvas.y);
+  Player= new player()
+  frameRate(60);
+}
+let x=0;
+let y=0;
+let i=0;
+let j=0;
+let movx=0;
+let movy=0;
+let t=0;
+let diry=0;
+var dirx=0;
+let mx=0;
+let my=0;
+let mirx=0;
+let miry=0;
+let r=90;
+let uni=1;
+let a=0;
+let b=0;
+let c=0;
+let d=0;
+let contc=0;
+function reta() {
+  while (contc==0) {
+      a=mouseX;
+      b=mouseY;
+      c=player.movx
+      d=player.movy
+      contc+=1
+      }
+}
+function movset(){
+  if (keyIsDown(LEFT_ARROW)) {
+    x -= 5*speedx;
+  }
+
+  if (keyIsDown(RIGHT_ARROW)) {
+    x += 5*speedx;
+  }
+
+  if (keyIsDown(UP_ARROW)) {
+    y -= 5*speedy;
+  }
+
+  if (keyIsDown(DOWN_ARROW)) {
+    y += 5*speedy;
+  }
+  
+  if (keyIsDown(82)){
+    y = 0;
+    x = 0;
+    t = 0;
+   }
+  if(canvas.x==canvas.y){
+  speedx=canvas.x/400;
+  speedy=canvas.y/400;
+  }else{
+  speedx=((((canvas.x/10)/16)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
+  speedy=((((canvas.y/10)/9)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
+  }
+ //designa o acumilado de x e y
+ if(canvas.x==canvas.y){
+  movx=+x;
+  movy=+y;
+ }else
+  movx=+x;
+  movy=+y;
+  //posiciona de acordo com a posição inicial+movimentação teclado
+  player.movx=player.x+movx;
+  player.movy=player.y+movy;
+}
+   //Jogador
+class player {
+    constructor(){
+    player.x= canvas.x/8;
+    player.y= (canvas.y/2);
+    
+  }
+    mov(){
+      //chama o movimento nas setas
+      movset();
+    //colisao parede
+      //parede x
+    while(player.movx<(0+25)){
+    player.movx=player.movx+(canvas.x);
+   }
+    while(player.movx>(canvas.x+50)){
+    player.movx=player.movx-(canvas.x+50);
+   }
+  //parede y
+   while(player.movy<(0-50)){
+    player.movy=player.movy+(canvas.y+50);
+   }
+    while(player.movy>(canvas.y+50)){
+    player.movy=player.movy-(canvas.y+50);
+   }
+  }//para desenhar 
+    show () {
+      if(canvas.x==canvas.y)
+        
+   ellipse(player.movx,player.movy,60,60);
+      else
+   ellipse(player.movx,player.movy,60,60);
+}
+  //tiro
+  tiro() {
+    //mira
+    if((player.movx-winMouseX)>0){
+      uni=Math.sqrt(((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
+    }
+      else{
+        uni=Math.sqrt((-(player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
+      }
+     
+      if (((player.movy-winMouseY))>0){
+      uni=Math.sqrt(-((player.movx-winMouseX)^2)+((player.movy-winMouseY)^2));
+      }
+      else{
+        uni=Math.sqrt((-(player.movx-winMouseX)^2)-((player.movy-winMouseY)^2));
+      }
+      ellipse(mirx,miry,30,30);
+   ellipse(mouseX,mouseY,10,10);
+      //gatilho
+     if (mouseIsPressed) {
+    if (mouseButton === LEFT) {
+      t+=0.05;
+     }
+     }
+        if (mouseIsPressed) {
+    if (mouseButton === LEFT) {
+        reta();
+  }
+        }
+  //movi tiro
+    let vx= Math.abs(c-a);
+    let vy=Math.abs(d-b);
+    //
+     if((c-a)>0)
+      dirx=c+t*-vx;
+      else
+        dirx=c+t*vx;
+     
+      if (((d-b))>0){
+       diry=d+(t*(-vy));
+     }
+      else {
+        diry=d+(t*vy);
+      }
+    ellipse(dirx,diry,20,20);
+  }
+}
+//inimigo
+function enemy() {
+ /*if (keyIsDown(65)) {
+    i -= 5;
+  }
+  
+
+  if (keyIsDown(68)) {
+    i += 5;
+  }
+
+  if (keyIsDown(87)) {
+    j -= 5;
+  }
+
+  if (keyIsDown(83)) {
+    j += 5;
+  }
+   if(keyCode === 82){
+    i = 0;
+    j = 0;
+   }*/
+    quadx= ((canvas.x/(8/7))-30)+i;
+    quady= ((canvas.y/2)-30)+j;
+    square(quadx,quady,60);
+  /*if(((quadx>=430)||(quadx<=-30))||((quady>=430)||(quady<=-30))){
+    i=0;
+   j=0;
+   }
+*/
+}
+//Rendering
+
+function draw() {
+  background(220);
+  enemy();
+  Player.show();
+  Player.tiro();
+  Player.mov();
+  line(0, canvas.y/2, canvas.x, canvas.y/2);
+  text(mouseX,90,60);
+  text(mouseY,90,80);
+  text(dirx^2,90,100);
+  text(contc,90,120);
+  line(canvas.x/2, 0, canvas.x/2, canvas.y);
+}
