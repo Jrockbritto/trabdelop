@@ -1,0 +1,172 @@
+/* 
+    Equipe: 
+        João Rock Brito Santos - Subturma C (Líder) 
+        Felipe Sérgio Sousa da Silva - Subturma A 
+        Etapa 1 & 2
+*/
+//Setup
+
+function setup() {
+  canvas.x=1280;
+  canvas.y=720;
+  createCanvas(canvas.x,canvas.y);
+  Player= new player();
+  HUD= new hud();
+  Enemy= new enemy();
+  frameRate(60);
+}
+let x=0,y=0,i=0,j=0,contc=0,modulo=0,velo=10,estiro = false,yd=0,coli=false,xd =0,z=0,v=50,xv=[], yv=[],xe=[],ye=[],t=1,qte=5,rlag=5,ves=0.5;
+
+function colision(){
+  tiro();
+  
+}
+function tiro(){
+  if (keyIsDown(CONTROL)&&(!estiro)){ 
+    xd=player.movx;
+    yd=player.movy;
+    estiro= true;
+    v--
+  }
+  if(estiro){
+    xd+=20
+  }
+  if((xd>canvas.x)||(coli)){
+    estiro=false
+  }
+    if(estiro) {
+    noStroke;
+    fill(255,215,0)
+    rect(xd,yd-2.5,10,5);
+    }
+
+}
+function move(){
+  for(t=1;t<=qte;t++){
+      hud();
+      z=t
+      xv[z]=xe[t]+40
+      yv[z]=ye[t]-25
+      xe[t]-=ves
+      fill(139,0,0);
+      ellipse(xe[t],ye[t],50,50)
+     } 
+}
+function movset(){
+  if (keyIsDown(LEFT_ARROW)) {
+    x -= 3*speedx;
+  }
+
+  if (keyIsDown(RIGHT_ARROW)) {
+    x += 3*speedx;
+  }
+
+  if (keyIsDown(UP_ARROW)) {
+    y -= 3*speedy;
+  }
+
+  if (keyIsDown(DOWN_ARROW)) {
+    y += 3*speedy;
+  }
+
+  if (keyIsDown(82)){
+    y = 0;
+    x = 0;
+    v = 50;
+   }
+  //velocidade do personagem compensada
+  if(canvas.x==canvas.y){
+    speedx=canvas.x/400;
+    speedy=canvas.y/400;
+  }else{
+    speedx=((((canvas.x/10)/16)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
+    speedy=((((canvas.y/10)/9)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
+  }
+
+  //posiciona de acordo com a posição inicial+movimentação teclado
+      player.movx= player.x+x;
+      player.movy= player.y+y;
+    //colisao parede
+      //parede x
+  if(player.movx<(30)){
+    x=0
+    player.x=30
+   }
+  if(player.movx>(canvas.x/2)-30){
+    x=0
+    player.x=(canvas.x/2)-30
+   }
+  //parede y
+  if(player.movy<(0+30)){
+    y=0;
+    player.y=30
+   }
+  if(player.movy>(canvas.y-30)){
+    y=0;
+    player.y=(canvas.y-30)
+   }
+}
+   //Jogador
+class player {
+    constructor(){
+      player.x= (canvas.x/8);
+      player.y= (canvas.y/2);
+  }
+    mov(){
+      //chama o movimento nas setas/colisao
+      movset();
+  }//para desenhar 
+    show () {
+      fill(255);
+      ellipse(player.movx,player.movy,60,60);
+}
+  tiro (){
+      tiro();
+  }
+   hud (){
+    hud();
+     z=0
+     xv[z]=player.movx-50
+     yv[z]=player.movy-25
+   }  
+   }
+//inimigo
+class enemy {
+  constructor(){
+   for(t=1;t<=qte;t++){
+      ye[t]= random(30,canvas.y-30);
+      xe[t]= (random(canvas.x+30,canvas.x+600)) 
+  }
+}
+  easy(){
+    move();
+  }
+  show(){
+    
+  }
+}
+function hud() {
+  //vermelho
+  fill(255,0,0);
+  noStroke();
+  rect(xv[z],yv[z],10,50);
+  //verde
+  fill(0,255,0);
+  noStroke();
+  rect(xv[z],yv[z],10,v);
+}
+//Rendering
+function draw() {
+  background(40);
+  text(t,90,100);
+  text(ves,90,120);
+  text(xe,90,140)
+  Player.show();
+  Player.mov();
+  Player.tiro();
+  Player.hud();
+  Enemy.easy();
+  stroke(0);
+  line(0, canvas.y/2, canvas.x, canvas.y/2);
+  line(canvas.x/2, 0, canvas.x/2, canvas.y);
+}
