@@ -1,0 +1,210 @@
+/* 
+    Equipe: 
+        João Rock Brito Santos - Subturma C (Líder) 
+        Felipe Sérgio Sousa da Silva - Subturma A 
+        Etapa 1 & 2
+*/
+//Setup
+
+function setup() {
+  canvas.x=1280;
+  canvas.y=720  ;
+  createCanvas(canvas.x,canvas.y);
+  Player= new player();
+  HUD= new hud();
+  Enemy= new enemy();
+  frameRate(60);
+  
+}
+let x=0,y=0,i=0,j=0,modulo=0,velo=10,estiro=[],colib=false,xdi =[],ydi=[],xd =[],yd=[],z=0,v=[],xv=[], yv=[],xe=[],ye=[],t=1,qte=5,rlag=5,ves=2,tt=50,ct=0,h=0,c=0,ts=[],qti=[],morte=false,l=0,tr=0;
+function colision(){
+  tiro();
+  
+}
+function tiro(){
+  if(ct<=tt){
+  if (keyIsDown(CONTROL)&&(estiro[ct]==false)){
+    estiro[ct]=true
+    ts[ct]=0
+    yd[ct]=player.movy;
+    xdi[ct]=player.movx; 
+    ct++
+  }
+  }else{text("Segure R para recarregar "+l,90,120);//kual bala
+    
+    if (keyIsDown(82)){
+    if(tr<=60)
+    tr+=1
+   }
+  }
+  for(var k=0;k<=ct;k++){
+    xd[k]=xdi[k]+ts[k];
+    
+    if(xd[k]==(xdi[k]+100/*cadencia */)){
+       estiro[ct]=false
+       }
+    
+    if(xd[k]<=(canvas.x+30)){
+       ts[k]+=5;
+    noStroke;
+    fill(255,215,0)
+    rect(xd[k],yd[k]-2.5,10,5);
+       }
+    }
+  }
+
+function move(){
+  tiro();
+  for(t=1;t<=qte;t++){
+    if(qti[t]>0){
+      hud();
+      z=t
+      xv[t]=xe[t]+40//hud
+      yv[t]=ye[t]-25//hud
+      v[t]=qti[t]*25;
+      xe[t]-=ves
+      fill(139,0,0)
+      ellipse(xe[t],ye[t],50,50)
+    //colisão cm final parede/personagem
+  if((xe[t]<0)||((((player.movy+30)>=(ye[t]-25)))&&(((player.movy-30)<=(ye[t]+25))))&&((((player.movx+30)>=(xe[t]-25)))&&(((player.movx-30)<=(xe[t]+25))))){
+    qti[0]=(qti[0]-2)
+    qti[t]=qti[t]-2
+  }
+      for(var l=0;l<=ct;l++){
+      if((yd[l]>=(ye[t]-25))&&(yd[l]<=(ye[t]+25))&&(xd[l]>=(xe[t]-25))){
+         qti[t]=qti[t]-2
+      }
+      }
+    }
+    if(v[0]<=0){
+      morte=true
+     }
+     }
+}
+function movset(){
+  if (keyIsDown(LEFT_ARROW)) {
+    x -= 3*speedx;
+  }
+
+  if (keyIsDown(RIGHT_ARROW)) {
+    x += 3*speedx;
+  }
+
+  if (keyIsDown(UP_ARROW)) {
+    y -= 3*speedy;
+  }
+
+  if (keyIsDown(DOWN_ARROW)) {
+    y += 3*speedy;
+  }
+  //velocidade do personagem compensada
+  if(canvas.x==canvas.y){
+    speedx=canvas.x/400;
+    speedy=canvas.y/400;
+  }else{
+    speedx=((((canvas.x/10)/16)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
+    speedy=((((canvas.y/10)/9)*40/*pode ser sub por uma vari para futuros updates de velo*/)/100);
+  }
+
+  //posiciona de acordo com a posição inicial+movimentação teclado
+      player.movx= player.x+x;
+      player.movy= player.y+y;
+    //colisao parede
+      //parede x
+  if(player.movx<(30)){
+    x=0
+    player.x=30
+   }
+  if(player.movx>(canvas.x/2)-30){
+    x=0
+    player.x=(canvas.x/2)-30
+   }
+  //parede y
+  if(player.movy<(0+30)){
+    y=0;
+    player.y=30
+   }
+  if(player.movy>(canvas.y-30)){
+    y=0;
+    player.y=(canvas.y-30)
+   }
+}
+   //Jogador
+class player {
+    constructor(){
+      player.x= (canvas.x/8);
+      player.y= (canvas.y/2);
+      qti[z]=10;
+
+  }
+    mov(){
+      //chama o movimento nas setas/colisao
+      movset();
+  }//para desenhar 
+    show () {
+      fill(255);
+      ellipse(player.movx,player.movy,60,60);
+}
+  tiro (){
+      tiro();
+  }
+   hud (){
+    hud();
+     z=0
+     xv[z]=(player.movx-50)
+     yv[z]=(player.movy-25)
+     v[z]=(qti[z]*5)
+   }  
+   }
+//inimigo
+class enemy {
+  constructor(){
+   estiro[0]=false
+   for(t=1;t<=qte;t++){
+      ye[t]= random(30,canvas.y-30);
+      xe[t]= (random(canvas.x+30,canvas.x+600));
+      qti[t]=2
+}
+  }
+  easy(){
+    move();
+  }
+  show(){
+    
+  }
+
+}
+function hud() {
+  //vermelho
+  fill(255,0,0);
+  noStroke();
+  rect(xv[z],yv[z],10,50);
+  //verde
+  fill(0,255,0);
+  noStroke();
+  rect(xv[z],yv[z],10,v[z]);
+}
+//Rendering
+function draw() {
+  background(40);
+  fill(255);
+  text("qual bala "+l,90,120);//kual bala
+  text("x inimigo "+xe,90,140);//x inimigo
+  text("posição x disparo "+xd,90,160);//posição x disparo
+  text("tiro speed "+ts,90,180);//tiro speed
+  text("contagem tiro "+ct,90,200);//contagem tiro
+  text("estiro "+estiro,90,220);//estiro
+  text("tt "+v[0],90,240);//estiro
+  text("morte player "+morte,90,260);
+  text("POSX "+(player.movx+30)+" POSY "+player.movy,90,280);//estiro 
+ if(morte==false){
+  Player.hud();
+  Player.show();
+  Player.mov();
+  Player.tiro();
+  Enemy.easy();
+ }
+  stroke(0);
+  line(0, canvas.y/2, canvas.x, canvas.y/2);
+  line(canvas.x/2, 0, canvas.x/2, canvas.y);
+}
